@@ -1,0 +1,26 @@
+page:
+  index: 'Authorization in 4tochki'
+  new: 'Add login data in 4tochki'
+  edit: 'Edit login data in 4tochki'
+  delete: 'Delete login data in 4tochki'
+
+breadcrumb:
+  index: 'Authorization in 4tochki'
+  new: 'Add login data in 4tochki'
+  edit: 'Edit login data in 4tochki'
+  delete: 'Delete login data in 4tochki'
+
+success:
+  new: '4tochki login data has been successfully added'
+  edit: '4tochki login data has been successfully updated'
+  delete: '4tochki login data has been successfully deleted'
+  restore: '4tochki login data has been successfully restored'
+
+danger:
+  new: '%s: Error adding authorization data to 4tochki'
+  edit: '%s: Error updating login data in 4tochki'
+  delete: '%s: Error when deleting login data in 4tochki'
+  restore: '%s: Error while restoring authorization data in 4tochki'
+form:
+  delete:
+    h4: 'Are you sure you want to delete your 4tochki login data?'
