@@ -14,6 +14,10 @@ $ composer require baks-dev/four-tochki
 
 ## Дополнительно
 
+Список идентификаторов складов партнера:
+
+https://b2b.4tochki.ru/Account/AvailableWarehouses
+
 Установка конфигурации и файловых ресурсов:
 
 ``` bash
