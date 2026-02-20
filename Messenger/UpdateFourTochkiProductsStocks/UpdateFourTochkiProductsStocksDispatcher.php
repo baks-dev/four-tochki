@@ -90,8 +90,8 @@ final readonly class UpdateFourTochkiProductsStocksDispatcher
                     $message->getProfile(),
                     $allProductsByCategoryResult->getProductInvariable(),
                 ),
-                [new MessageDelay('1 minute')],
-                transport: 'four-tochki'
+                // [new MessageDelay('1 minute')],
+                transport: (string) $message->getProfile(),
             );
         }
     }

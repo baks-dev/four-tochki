@@ -43,10 +43,11 @@ final class FourTochkiStockRefreshSchedule implements ScheduleInterface
 
     /**
      * Интервал повтора
+     *
      * @see https://www.php.net/manual/en/dateinterval.createfromdatestring.php
      */
     public function getInterval(): DateInterval
     {
-        return DateInterval::createFromDateString('1 day');
+        return DateInterval::createFromDateString('5 seconds');
     }
 }
