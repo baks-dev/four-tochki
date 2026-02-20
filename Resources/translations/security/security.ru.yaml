@@ -1,0 +1,28 @@
+# Роль
+
+ROLE_FOUR_TOCHKI_AUTH:
+  header: '4tochki'
+  name: 'Данные для авторизации 4tochki'
+  desc: 'Данные для авторизации 4tochki'
+
+# Правила
+
+ROLE_FOUR_TOCHKI_AUTH_INDEX:
+  name: 'Просмотр'
+  desc: ''
+
+ROLE_FOUR_TOCHKI_AUTH_NEW:
+  name: 'Добавить'
+  desc: ''
+
+ROLE_FOUR_TOCHKI_AUTH_EDIT:
+  name: 'Редактировать'
+  desc: ''
+
+ROLE_FOUR_TOCHKI_AUTH_DELETE:
+  name: 'Удалить'
+  desc: ''
+
+ROLE_FOUR_TOCHKI_AUTH_ACTIVE:
+  name: 'Активность профилей'
+  desc: ''

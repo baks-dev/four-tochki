@@ -1,0 +1,27 @@
+# Role
+
+ROLE_FOUR_TOCHKI_AUTH:
+  header: '4tochki'
+  name: '4tochki authorization'
+  desc: '4tochki authorization'
+
+# Rules
+ROLE_FOUR_TOCHKI_AUTH_INDEX:
+  name: 'View'
+  desc: ''
+
+ROLE_FOUR_TOCHKI_AUTH_NEW:
+  name: 'Add'
+  desc: ''
+
+ROLE_FOUR_TOCHKI_AUTH_EDIT:
+  name: 'Edit'
+  desc: ''
+
+ROLE_FOUR_TOCHKI_AUTH_DELETE:
+  name: 'Delete'
+  desc: ''
+
+ROLE_FOUR_TOCHKI_AUTH_ACTIVE:
+  name: 'Auth active'
+  desc: ''
