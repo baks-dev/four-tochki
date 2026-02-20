@@ -68,20 +68,20 @@ final class FourTochkiAuthNewTest extends KernelTestCase
         /** @var EntityManagerInterface $EntityManager */
         $EntityManager = self::getContainer()->get(EntityManagerInterface::class);
 
-        $dromAuth = $EntityManager
+        $fourTochkiAuth = $EntityManager
             ->getRepository(FourTochkiAuth::class)
             ->find(FourTochkiAuthUid::TEST);
 
-        if($dromAuth)
+        if($fourTochkiAuth)
         {
-            $EntityManager->remove($dromAuth);
+            $EntityManager->remove($fourTochkiAuth);
         }
 
-        $dromAuthEvent = $EntityManager
+        $fourTochkiAuthEvent = $EntityManager
             ->getRepository(FourTochkiAuthEvent::class)
             ->findBy(['main' => FourTochkiAuthUid::TEST]);
 
-        foreach($dromAuthEvent as $event)
+        foreach($fourTochkiAuthEvent as $event)
         {
             $EntityManager->remove($event);
         }
@@ -92,51 +92,51 @@ final class FourTochkiAuthNewTest extends KernelTestCase
 
     public function testNew(): void
     {
-        $dromAuthNewEditDTO = new FourTochkiAuthNewEditDTO();
+        $fourTochkiAuthNewEditDTO = new FourTochkiAuthNewEditDTO();
 
         // FourTochkiAuthProfileDTO
-        $dromAuthProfileDTO = new FourTochkiAuthProfileDTO();
-        $dromAuthProfileDTO->setValue(new UserProfileUid(UserProfileUid::TEST));
-        self::assertTrue($dromAuthProfileDTO->getValue()->equals(UserProfileUid::TEST));
+        $fourTochkiAuthProfileDTO = new FourTochkiAuthProfileDTO();
+        $fourTochkiAuthProfileDTO->setValue(new UserProfileUid(UserProfileUid::TEST));
+        self::assertTrue($fourTochkiAuthProfileDTO->getValue()->equals(UserProfileUid::TEST));
 
-        $dromAuthNewEditDTO->setProfile($dromAuthProfileDTO);
+        $fourTochkiAuthNewEditDTO->setProfile($fourTochkiAuthProfileDTO);
 
 
         // FourTochkiAuthActiveDTO
-        $dromAuthActiveDTO = new FourTochkiAuthActiveDTO();
-        $dromAuthActiveDTO->setValue(true);
-        self::assertTrue($dromAuthActiveDTO->getValue());
+        $fourTochkiAuthActiveDTO = new FourTochkiAuthActiveDTO();
+        $fourTochkiAuthActiveDTO->setValue(true);
+        self::assertTrue($fourTochkiAuthActiveDTO->getValue());
 
-        $dromAuthNewEditDTO->setActive($dromAuthActiveDTO);
+        $fourTochkiAuthNewEditDTO->setActive($fourTochkiAuthActiveDTO);
 
 
         // FourTochkiAuthLoginDTO
-        $dromAuthLoginDTO = new FourTochkiAuthLoginDTO();
-        $dromAuthLoginDTO->setValue('FourTochkiAuthLoginDTO');
-        self::assertSame('FourTochkiAuthLoginDTO', $dromAuthLoginDTO->getValue());
+        $fourTochkiAuthLoginDTO = new FourTochkiAuthLoginDTO();
+        $fourTochkiAuthLoginDTO->setValue('FourTochkiAuthLoginDTO');
+        self::assertSame('FourTochkiAuthLoginDTO', $fourTochkiAuthLoginDTO->getValue());
 
-        $dromAuthNewEditDTO->setLogin($dromAuthLoginDTO);
+        $fourTochkiAuthNewEditDTO->setLogin($fourTochkiAuthLoginDTO);
 
 
         // FourTochkiAuthPasswordDTO
-        $dromAuthPasswordDTO = new FourTochkiAuthPasswordDTO();
-        $dromAuthPasswordDTO->setValue('FourTochkiAuthPasswordDTO');
-        self::assertSame('FourTochkiAuthPasswordDTO', $dromAuthPasswordDTO->getValue());
+        $fourTochkiAuthPasswordDTO = new FourTochkiAuthPasswordDTO();
+        $fourTochkiAuthPasswordDTO->setValue('FourTochkiAuthPasswordDTO');
+        self::assertSame('FourTochkiAuthPasswordDTO', $fourTochkiAuthPasswordDTO->getValue());
 
-        $dromAuthNewEditDTO->setPassword($dromAuthPasswordDTO);
+        $fourTochkiAuthNewEditDTO->setPassword($fourTochkiAuthPasswordDTO);
 
 
         // FourTochkiAuthWarehouseDTO
-        $dromAuthWarehouseDTO = new FourTochkiAuthWarehouseDTO();
-        $dromAuthWarehouseDTO->setValue(1);
-        self::assertSame(1, $dromAuthWarehouseDTO->getValue());
+        $fourTochkiAuthWarehouseDTO = new FourTochkiAuthWarehouseDTO();
+        $fourTochkiAuthWarehouseDTO->setValue(1);
+        self::assertSame(1, $fourTochkiAuthWarehouseDTO->getValue());
 
-        $dromAuthNewEditDTO->setWarehouse($dromAuthWarehouseDTO);
+        $fourTochkiAuthNewEditDTO->setWarehouse($fourTochkiAuthWarehouseDTO);
 
 
         /** @var FourTochkiAuthNewEditHandler $FourTochkiAuthNewEditHandler */
         $FourTochkiAuthNewEditHandler = self::getContainer()->get(FourTochkiAuthNewEditHandler::class);
-        $newFourTochkiAuth = $FourTochkiAuthNewEditHandler->handle($dromAuthNewEditDTO);
+        $newFourTochkiAuth = $FourTochkiAuthNewEditHandler->handle($fourTochkiAuthNewEditDTO);
         self::assertInstanceOf(FourTochkiAuth::class, $newFourTochkiAuth);
 
 

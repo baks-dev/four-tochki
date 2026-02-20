@@ -76,11 +76,11 @@ final class FourTochkiAuthDeleteTest extends KernelTestCase
         $deleteFourTochkiAuth = $FourTochkiAuthDeleteHandler->handle($deleteDTO);
         self::assertTrue($deleteFourTochkiAuth instanceof FourTochkiAuth);
 
-        $dromAuth = $EntityManager
+        $fourTochkiAuth = $EntityManager
             ->getRepository(FourTochkiAuth::class)
             ->find($deleteFourTochkiAuth->getId());
 
-        self::assertNull($dromAuth);
+        self::assertNull($fourTochkiAuth);
     }
 
     public static function tearDownAfterClass(): void

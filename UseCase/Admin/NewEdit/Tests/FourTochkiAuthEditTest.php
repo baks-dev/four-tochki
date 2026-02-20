@@ -59,13 +59,13 @@ final class FourTochkiAuthEditTest extends KernelTestCase
 
         self::assertNotNull($activeEvent);
 
-        $dromAuthNewEditDTO = new FourTochkiAuthNewEditDTO();
+        $fourTochkiAuthNewEditDTO = new FourTochkiAuthNewEditDTO();
 
-        $activeEvent->getDto($dromAuthNewEditDTO);
+        $activeEvent->getDto($fourTochkiAuthNewEditDTO);
 
         /** @var FourTochkiAuthNewEditHandler $FourTochkiAuthNewEditHandler */
         $FourTochkiAuthNewEditHandler = $container->get(FourTochkiAuthNewEditHandler::class);
-        $editFourTochkiAuth = $FourTochkiAuthNewEditHandler->handle($dromAuthNewEditDTO);
+        $editFourTochkiAuth = $FourTochkiAuthNewEditHandler->handle($fourTochkiAuthNewEditDTO);
         self::assertTrue($editFourTochkiAuth instanceof FourTochkiAuth);
 
         $modifier = $EntityManager
