@@ -27,6 +27,10 @@ namespace BaksDev\FourTochki;
 
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
+
+/**
+ * @note: Индекс сортировки 480
+ */
 class BaksDevFourTochkiBundle extends AbstractBundle
 {
     public const string NAMESPACE = __NAMESPACE__.'\\';
