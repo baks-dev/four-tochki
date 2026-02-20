@@ -52,6 +52,10 @@ final readonly class UpdateOneFourTochkiProductStockDispatcher
         private EntityManagerInterface $EntityManager,
     ) {}
 
+    /**
+     * Получаем информацию об остатках данного товара на складе 4tochki и обновляем остаток в соответствии с полученными
+     * данными
+     */
     public function __invoke(UpdateOneFourTochkiProductStockMessage $message): void
     {
         /** Находим всю необходимую информацию о продукте по его invariable */

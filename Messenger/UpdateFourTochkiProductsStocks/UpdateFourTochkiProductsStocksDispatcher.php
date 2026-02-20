@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\Messenger\UpdateFourTochkiProductsStocks;
 
-use BaksDev\Core\Messenger\MessageDelay;
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\FourTochki\Messenger\UpdateOneFourTochkiProductStock\UpdateOneFourTochkiProductStockMessage;
 use BaksDev\Products\Product\Repository\AllProductsByCategory\AllProductsByCategoryInterface;
@@ -44,6 +43,7 @@ final readonly class UpdateFourTochkiProductsStocksDispatcher
         private UserByUserProfileInterface $UserByUserProfileRepository,
     ) {}
 
+    /** Находим все продукты данного профиля и бросаем сообщение на обновление их остатков */
     public function __invoke(UpdateFourTochkiProductsStocksMessage $message): void
     {
         /** Получаем пользователя, в которого авторизуемся  */
@@ -79,6 +79,16 @@ final readonly class UpdateFourTochkiProductsStocksDispatcher
 
         foreach ($result as $allProductsByCategoryResult)
         {
+            /** Пропускаем продукты без модификации */
+            if(
+                true === empty($allProductsByCategoryResult->getOfferValue()) ||
+                true === empty($allProductsByCategoryResult->getVariationValue()) ||
+                true === empty($allProductsByCategoryResult->getModificationValue())
+            )
+            {
+                continue;
+            }
+
             /** Отправляем сообщение  */
             $this->MessageDispatch->dispatch(
                 new UpdateOneFourTochkiProductStockMessage(
@@ -90,7 +100,6 @@ final readonly class UpdateFourTochkiProductsStocksDispatcher
                     $message->getProfile(),
                     $allProductsByCategoryResult->getProductInvariable(),
                 ),
-                // [new MessageDelay('1 minute')],
                 transport: (string) $message->getProfile(),
             );
         }
