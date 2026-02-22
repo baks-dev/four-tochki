@@ -26,16 +26,17 @@ declare(strict_types=1);
 namespace BaksDev\FourTochki\Api;
 
 use BaksDev\FourTochki\Type\Authorization\FourTochkiAuthorization;
+use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use InvalidArgumentException;
 use SoapClient;
 
 abstract class FourTochkiApi
 {
-    protected FourTochkiAuthorization|false $authorization = false;
+    private FourTochkiAuthorization|false $authorization = false;
 
     private const string PATH = 'http://api-b2b.4tochki.ru/WCF/ClientService.svc?wsdl';
 
-    public function authorization(FourTochkiAuthorization $authorization): self
+    public function authorization(FourTochkiAuthorization|false $authorization): self
     {
         $this->authorization = $authorization;
         return $this;
@@ -55,4 +56,16 @@ abstract class FourTochkiApi
 
         return $client->$method($options);
     }
+
+    public function getWarehouse(): int|false
+    {
+        return $this->authorization ? $this->authorization->getWarehouse() : false;
+    }
+
+    public function getProfile(): UserProfileUid|false
+    {
+        return $this->authorization ? $this->authorization->getProfile() : false;
+    }
+
+
 }

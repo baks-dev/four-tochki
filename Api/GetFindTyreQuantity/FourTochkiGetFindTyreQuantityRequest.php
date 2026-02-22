@@ -40,7 +40,7 @@ final class FourTochkiGetFindTyreQuantityRequest extends FourTochkiApi
     private ?int $height = null;
 
     private ?int $diameter = null;
-    
+
     private ?string $loadIndex = null;
 
     public function setBrand(string $brand): self
@@ -80,6 +80,7 @@ final class FourTochkiGetFindTyreQuantityRequest extends FourTochkiApi
     }
 
     /** Метод получает по Api и возвращает остаток на складе продукта по данным критериям
+     *
      * @see https://b2b.4tochki.ru/Help/Page?url=GetFindTyre.html
      *
      * diameter_max, diameter_min - Диаметр. Интервал (включительно): [min , max].
@@ -90,7 +91,12 @@ final class FourTochkiGetFindTyreQuantityRequest extends FourTochkiApi
      */
     public function findTyre(): int|false
     {
-        $filter = ['wrh_list' => [$this->authorization->getWarehouse()]];
+        if(false === $this->getWarehouse())
+        {
+            return false;
+        }
+
+        $filter = ['wrh_list' => [$this->getWarehouse()]];
 
         if(false === empty($this->brand))
         {
