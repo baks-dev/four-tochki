@@ -44,7 +44,7 @@ final readonly class FourTochkiStockRefreshScheduleHandler
 
     public function __invoke(FourTochkiStockRefreshScheduleMessage $message): void
     {
-        /** Получаем все активные профили, у которых активный токен */
+        /** Получаем все активные профили, у которых активная авторизация */
         $profiles = $this->AllFourTochkiAuthRepository
             ->findPaginator()
             ->getData();
@@ -52,7 +52,7 @@ final readonly class FourTochkiStockRefreshScheduleHandler
         if(false === empty($profiles))
         {
             $this->logger->warning(
-                'Профилей с активным токеном не найдено',
+                'Профилей с активной авторизацией не найдено',
                 [__FILE__.':'.__LINE__]
             );
 
