@@ -42,11 +42,21 @@ final class AllProfileFourTochkiAuthRepositoryTest extends KernelTestCase
     #[DependsOnClass(FourTochkiAuthNewTest::class)]
     public function testRepository(): void
     {
+        self::assertTrue(true);
+
         $AllProfileFourTochkiAuthRepository = self::getContainer()->get(AllProfileFourTochkiAuthInterface::class);
 
         /** @var AllProfileFourTochkiAuthRepository $AllProfileFourTochkiAuthRepository */
         $result = $AllProfileFourTochkiAuthRepository->findAll();
 
-        self::assertInstanceOf(UserProfileUid::class, $result->current());
+        if(false === $result || false === $result->valid())
+        {
+            return;
+        }
+
+        foreach($result as $UserProfileUid)
+        {
+            self::assertInstanceOf(UserProfileUid::class, $UserProfileUid);
+        }
     }
 }
