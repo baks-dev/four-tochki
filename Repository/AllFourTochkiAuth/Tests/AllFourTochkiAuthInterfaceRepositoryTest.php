@@ -31,10 +31,10 @@ use BaksDev\FourTochki\Repository\AllFourTochkiAuth\AllFourTochkiAuthResult;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Tests\FourTochkiAuthNewTest;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use PHPUnit\Framework\Attributes\DependsOnClass;
+use PHPUnit\Framework\Attributes\Group;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\DependencyInjection\Attribute\When;
 
 #[When(env: 'test')]
@@ -53,7 +53,8 @@ final class AllFourTochkiAuthInterfaceRepositoryTest extends KernelTestCase
             ->findPaginator()
             ->getData();
 
-        foreach ($result as $item) {
+        foreach($result as $item)
+        {
             self::assertInstanceOf(AllFourTochkiAuthResult::class, $item);
 
             // Вызываем все геттеры
@@ -67,7 +68,7 @@ final class AllFourTochkiAuthInterfaceRepositoryTest extends KernelTestCase
                 {
                     // Вызываем метод
                     $data = $method->invoke($item);
-//                    dump($data);
+                    //                    dump($data);
                 }
             }
 
