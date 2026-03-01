@@ -27,7 +27,9 @@ namespace BaksDev\FourTochki\Repository\FourTochkiAuthorizationByProfile;
 
 use BaksDev\FourTochki\Type\Authorization\FourTochkiAuthorization;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(public: true)]
 interface FourTochkiAuthorizationByProfileInterface
 {
     public function getAuthorization(UserProfileUid $profile): FourTochkiAuthorization|false;

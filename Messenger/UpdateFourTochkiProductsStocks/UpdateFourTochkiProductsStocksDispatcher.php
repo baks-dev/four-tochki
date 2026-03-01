@@ -33,7 +33,7 @@ use BaksDev\Users\User\Entity\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler]
+#[AsMessageHandler(priority: 0)]
 final readonly class UpdateFourTochkiProductsStocksDispatcher
 {
     public function __construct(
