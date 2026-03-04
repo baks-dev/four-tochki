@@ -23,9 +23,10 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\FourTochki\Api\GetFindTyreQuantity\Tests;
+namespace BaksDev\FourTochki\Api\GetFindTyre\Tests;
 
-use BaksDev\FourTochki\Api\GetFindTyreQuantity\FourTochkiGetFindTyreQuantityRequest;
+use BaksDev\FourTochki\Api\GetFindTyre\FourTochkiGetFindTyreRequest;
+use BaksDev\FourTochki\Api\GetFindTyre\FourTochkiGetFindTyreResult;
 use BaksDev\FourTochki\Repository\FourTochkiAuthorizationByProfile\FourTochkiAuthorizationByProfileInterface;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Tests\FourTochkiAuthNewTest;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
@@ -37,7 +38,7 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[When(env: 'test')]
 #[Group('four-tochki')]
 #[Group('four-tochki-api')]
-final class FourTochkiGetFindTyreQuantityRequestTest extends KernelTestCase
+final class FourTochkiGetFindTyreRequestTest extends KernelTestCase
 {
     #[DependsOnClass(FourTochkiAuthNewTest::class)]
     public function testApi(): void
@@ -51,19 +52,13 @@ final class FourTochkiGetFindTyreQuantityRequestTest extends KernelTestCase
         /** Получаем данные для авторизации */
         $authorization = $FourTochkiAuthorizationByProfileRepository->getAuthorization(new UserProfileUid($profileUid));
 
-        $FourTochkiGetFindTyreRequest = self::getContainer()->get(FourTochkiGetFindTyreQuantityRequest::class);
+        $FourTochkiGetFindTyreRequest = self::getContainer()->get(FourTochkiGetFindTyreRequest::class);
 
-        /** @var FourTochkiGetFindTyreQuantityRequest $FourTochkiGetFindTyreRequest */
+        /** @var FourTochkiGetFindTyreRequest $FourTochkiGetFindTyreRequest */
         $result = $FourTochkiGetFindTyreRequest
             ->authorization($authorization)
-            ->setBrand('Triangle')
-            ->setModel('EffeXSport TH202')
-            ->setDiameter(19)
-            ->setWidth(275)
-            ->setHeight(50)
-            ->setLoadIndex('112W')
-            ->findTyre();
+            ->findTyre('CTS287312');
 
-        self::assertTrue(is_int($result) || false === $result);
+        self::assertInstanceOf(FourTochkiGetFindTyreResult::class, $result);
     }
 }

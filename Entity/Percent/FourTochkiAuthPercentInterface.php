@@ -23,52 +23,14 @@
 
 declare(strict_types=1);
 
-namespace BaksDev\FourTochki\Type\Authorization;
+namespace BaksDev\FourTochki\Entity\Percent;
 
-use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
-
-final readonly class FourTochkiAuthorization
+interface FourTochkiAuthPercentInterface
 {
-    private UserProfileUid $profile;
-
-    public function __construct(
-        UserProfileUid|string $profile,
-        private string $login,
-        private string $password,
-        private int $warehouse,
-        private ?string $percent,
-    )
-    {
-        if(is_string($profile))
-        {
-            $profile = new UserProfileUid($profile);
-        }
-
-        $this->profile = $profile;
-    }
-
-    public function getProfile(): UserProfileUid
-    {
-        return $this->profile;
-    }
-
-    public function getLogin(): string
-    {
-        return $this->login;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function getWarehouse(): int
-    {
-        return $this->warehouse;
-    }
-
-    public function getPercent(): string|false
-    {
-        return false === empty($this->percent) ? $this->percent : false;
-    }
+    /**
+     * Значение свойства
+     *
+     * @see FourTochkiAuthPercent
+     */
+    public function getValue(): ?string;
 }

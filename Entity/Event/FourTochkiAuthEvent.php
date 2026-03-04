@@ -31,6 +31,7 @@ use BaksDev\FourTochki\Entity\Active\FourTochkiAuthActive;
 use BaksDev\FourTochki\Entity\Login\FourTochkiAuthLogin;
 use BaksDev\FourTochki\Entity\Modify\FourTochkiAuthModify;
 use BaksDev\FourTochki\Entity\Password\FourTochkiAuthPassword;
+use BaksDev\FourTochki\Entity\Percent\FourTochkiAuthPercent;
 use BaksDev\FourTochki\Entity\Profile\FourTochkiAuthProfile;
 use BaksDev\FourTochki\Entity\Warehouse\FourTochkiAuthWarehouse;
 use BaksDev\FourTochki\Type\Event\FourTochkiAuthEventUid;
@@ -76,6 +77,10 @@ class FourTochkiAuthEvent extends EntityEvent
     /** Идентификатор склада  */
     #[ORM\OneToOne(targetEntity: FourTochkiAuthWarehouse::class, mappedBy: 'event', cascade: ['all'])]
     private ?FourTochkiAuthWarehouse $warehouse = null;
+
+    /** Торговая наценка площадки */
+    #[ORM\OneToOne(targetEntity: FourTochkiAuthPercent::class, mappedBy: 'event', cascade: ['all'])]
+    private ?FourTochkiAuthPercent $percent = null;
 
     #[ORM\OneToOne(targetEntity: FourTochkiAuthModify::class, mappedBy: 'event', cascade: ['all'])]
     private FourTochkiAuthModify $modify;

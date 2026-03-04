@@ -25,11 +25,13 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\Messenger\UpdateOneFourTochkiProductStock;
 
-use BaksDev\Field\Pack\Brand\Type\BrandField;
-use BaksDev\Field\Pack\Model\Type\ModelField;
-use BaksDev\FourTochki\Api\GetFindTyreQuantity\FourTochkiGetFindTyreQuantityRequest;
-use BaksDev\FourTochki\Repository\FourTochkiAuthorizationByProfile\FourTochkiAuthorizationByProfileInterface;
-use BaksDev\Products\Product\Repository\ProductDetailByValue\ProductDetailByValueInterface;
+use BaksDev\Core\Messenger\MessageDispatchInterface;
+use BaksDev\FourTochki\Api\GetFindTyre\FourTochkiGetFindTyreRequest;
+use BaksDev\FourTochki\Api\GetFindTyre\FourTochkiGetFindTyreResult;
+use BaksDev\FourTochki\Products\Repository\FourTochkiProductProfile\FourTochkiProductProfileInterface;
+use BaksDev\FourTochki\Products\UseCase\NewEdit\FourTochkiProductDTO;
+use BaksDev\Products\Product\Messenger\Price\UpdateProductPriceMessage;
+use BaksDev\Products\Product\Repository\CurrentProductEvent\CurrentProductEventInterface;
 use BaksDev\Products\Stocks\Entity\Total\ProductStockTotal;
 use BaksDev\Products\Stocks\Repository\ProductStocksTotalStorage\ProductStocksTotalStorageInterface;
 use BaksDev\Products\Stocks\UseCase\Admin\EditTotal\ProductStockTotalEditDTO;
@@ -44,12 +46,13 @@ final readonly class UpdateOneFourTochkiProductStockDispatcher
 {
     public function __construct(
         #[Target('fourTochkiLogger')] private LoggerInterface $Logger,
-        private FourTochkiGetFindTyreQuantityRequest $FourTochkiGetFindTyreRequest,
-        private FourTochkiAuthorizationByProfileInterface $FourTochkiAuthorizationByProfileRepository,
-        private ProductDetailByValueInterface $ProductDetailByValueRepository,
+        private FourTochkiGetFindTyreRequest $FourTochkiGetFindTyreRequest,
         private ProductStockTotalEditHandler $ProductStockTotalEditHandler,
         private ProductStocksTotalStorageInterface $ProductStocksTotalStorageRepository,
         private EntityManagerInterface $EntityManager,
+        private FourTochkiProductProfileInterface $FourTochkiProductProfileRepository,
+        private CurrentProductEventInterface $CurrentProductEventRepository,
+        private MessageDispatchInterface $MessageDispatch,
     ) {}
 
     /**
@@ -58,175 +61,141 @@ final readonly class UpdateOneFourTochkiProductStockDispatcher
      */
     public function __invoke(UpdateOneFourTochkiProductStockMessage $message): void
     {
-        /** Находим всю необходимую информацию о продукте по его invariable */
-        $productDetailByInvariableResult = $this->ProductDetailByValueRepository
-            ->byProduct($message->getProduct())
-            ->byOfferValue($message->getOfferValue())
-            ->byVariationValue($message->getVariationValue())
-            ->byModificationValue($message->getModificationValue())
+        /** Находим настройки продукта для 4tochki */
+        $fourTochkiProduct = $this->FourTochkiProductProfileRepository
+            ->product($message->getProduct())
+            ->offerConst($message->getOfferConst())
+            ->variationConst($message->getVariationConst())
+            ->modificationConst($message->getModificationConst())
+            ->forProfile($message->getProfile())
             ->find();
 
-        if(false === $productDetailByInvariableResult)
+        if(false === $fourTochkiProduct)
         {
-            $this->Logger->critical(
-                'Информация о продукте не была найдена',
+            $this->Logger->warning(
+                'Настройки для продукта не были найдены',
                 [var_export($message, true), self::class.':'.__LINE__]
             );
             return;
         }
 
+        $fourTochkiProductDTO = new FourTochkiProductDTO();
+        $fourTochkiProduct->getDto($fourTochkiProductDTO);
 
-        /** Находим все поля продукта */
-        $categorySectionFields = $productDetailByInvariableResult->getCategorySectionField();
+        $code = $fourTochkiProductDTO
+            ->getCode()
+            ->getValue();
 
-        if(true === empty($categorySectionFields))
-        {
-            $this->Logger->warning(
-                'Поля категории для продукта не были найдены',
-                [var_export($message, true), self::class.':'.__LINE__]
-            );
-            return;
-        }
-
-
-        /** Ищем поле типа "Модель"  */
-        $model = array_find($categorySectionFields, function (Object $categorySectionField): bool
-        {
-            return $categorySectionField->field_type === ModelField::TYPE;
-        });
-
-        if(false === isset($model->field_value))
-        {
-            /** Если у продукта нет поля типа "Модель" - пропускаем его */
-            $this->Logger->warning(
-                sprintf(
-                    'Для продукта %s не заполнено поле Модель',
-                    $productDetailByInvariableResult->getProductName()
-                ),
-                [var_export($message, true), self::class.':'.__LINE__]);
-            return;
-        }
-
-
-        /** Ищем поля типа "Бренд" */
-        $brand = array_find($categorySectionFields, function (Object $categorySectionField): bool
-        {
-            return $categorySectionField->field_type === BrandField::TYPE;
-        });
-
-        if(false === isset($brand->field_value))
-        {
-            /** Если у продукта нет поля типа "Бренд" - пропускаем его */
-            $this->Logger->warning(
-                sprintf(
-                    'Для продукта %s не заполнено поле Бренд',
-                    $productDetailByInvariableResult->getProductName()
-                ),
-                [var_export($message, true), self::class.':'.__LINE__]
-            );
-            return;
-        }
-
-        $brand = $brand->field_value;
-
-
-        /** Получаем данные для авторизации */
-        $authorization = $this->FourTochkiAuthorizationByProfileRepository->getAuthorization($message->getProfile());
-
-        if(false === $authorization)
-        {
-            $this->Logger->warning(
-                'Данные для авторизации данного профиля не были найдены',
-                [var_export($message, true), self::class.':'.__LINE__]
-            );
-            return;
-        }
-
-        $model = $model->field_value;
-
-        $quantity = $this->FourTochkiGetFindTyreRequest
-            ->authorization($authorization)
-            ->setDiameter((int) $productDetailByInvariableResult->getProductOfferValue())
-            ->setWidth((int) $productDetailByInvariableResult->getProductVariationValue())
-            ->setHeight((int) $productDetailByInvariableResult->getProductModificationValue())
-            ->setLoadIndex($productDetailByInvariableResult->getProductModificationPostfix())
-            ->setBrand($brand)
-            ->setModel($model)
-            ->findTyre();
-
-
-        if(false === $quantity)
-        {
-            $this->Logger->warning(
-                sprintf('Данная модель %s %s не была найдена на складах 4tochki', $brand, $model),
-                [var_export($message, true), self::class.':'.__LINE__]
-            );
-            return;
-        }
-
-        $productStockTotalEditDTO = new ProductStockTotalEditDTO();
-
-
-        /** Получаем текущий складской остаток для данных продукта и профиля, если таковой имеется */
-        $productStocksTotal = $this->ProductStocksTotalStorageRepository
-            ->product($productDetailByInvariableResult->getProductId())
-            ->offer($productDetailByInvariableResult->getProductOfferConst())
-            ->variation($productDetailByInvariableResult->getProductVariationConst())
-            ->modification($productDetailByInvariableResult->getProductModificationConst())
+        $fourTochkiGetFindTyreResult = $this->FourTochkiGetFindTyreRequest
             ->profile($message->getProfile())
-            ->find();
+            ->findTyre($code);
 
-
-        /** Если отсутствует место складирования - создаем на указанный профиль пользователя */
-        if(false === ($productStocksTotal instanceof ProductStockTotal))
+        if(false === ($fourTochkiGetFindTyreResult instanceof FourTochkiGetFindTyreResult))
         {
-
-            $productStocksTotal = new ProductStockTotal(
-                $message->getUser(),
-                $message->getProfile(),
-                $productDetailByInvariableResult->getProductId(),
-                $productDetailByInvariableResult->getProductOfferConst(),
-                $productDetailByInvariableResult->getProductVariationConst(),
-                $productDetailByInvariableResult->getProductModificationConst(),
-                '4tochki',
+            $this->Logger->warning(
+                sprintf('Модель с артикулом %s не была найдена на складах 4tochki', $code),
+                [var_export($message, true), self::class.':'.__LINE__]
             );
+            return;
+        }
 
-            $this->EntityManager->persist($productStocksTotal);
-            $this->EntityManager->flush();
+
+        /** Если выбрана настройка изменения остатков на складе */
+        if(true === $fourTochkiProductDTO->getRefresh()->getValue())
+        {
+            $productStockTotalEditDTO = new ProductStockTotalEditDTO();
+
+
+            /** Получаем текущий складской остаток для данных продукта и профиля, если таковой имеется */
+            $productStocksTotal = $this->ProductStocksTotalStorageRepository
+                ->product($message->getProduct())
+                ->offer($message->getOfferConst())
+                ->variation($message->getVariationConst())
+                ->modification($message->getModificationConst())
+                ->profile($message->getProfile())
+                ->find();
+
+
+            /** Если отсутствует место складирования - создаем на указанный профиль пользователя */
+            if(false === ($productStocksTotal instanceof ProductStockTotal))
+            {
+                $productStocksTotal = new ProductStockTotal(
+                    $message->getUser(),
+                    $message->getProfile(),
+                    $message->getProduct(),
+                    $message->getOfferConst(),
+                    $message->getVariationConst(),
+                    $message->getModificationConst(),
+                    '4tochki',
+                );
+
+                $this->EntityManager->persist($productStocksTotal);
+                $this->EntityManager->flush();
+
+                $this->Logger->info(
+                    'Место складирования профиля не найдено! Создали новое место для указанной продукции',
+                    [
+                        self::class.':'.__LINE__,
+                        'profile' => (string) $message->getProfile(),
+                    ],
+                );
+            }
+
+            $productStocksTotal->getDto($productStockTotalEditDTO);
+
+            $productStockTotalEditDTO
+                ->setTotal($fourTochkiGetFindTyreResult->getQuantity())
+                ->setStorage('4tochki');
+
+
+            /** Обновляем остаток на складе */
+            $handle = $this->ProductStockTotalEditHandler->handle($productStockTotalEditDTO);
+
+            if(false === ($handle instanceof ProductStockTotal))
+            {
+                $this->Logger->critical(
+                    'Не удалось обновить остаток продукта на складе',
+                    [var_export($message, true), self::class.':'.__LINE__]
+                );
+
+                return;
+            }
 
             $this->Logger->info(
-                'Место складирования профиля не найдено! Создали новое место для указанной продукции',
-                [
-                    self::class.':'.__LINE__,
-                    'profile' => (string) $message->getProfile(),
-                ],
-            );
-        }
-
-
-        $productStocksTotal->getDto($productStockTotalEditDTO);
-
-        $productStockTotalEditDTO
-            ->setTotal($quantity)
-            ->setStorage('4tochki');
-
-
-        /** Обновляем остаток на складе */
-        $handle = $this->ProductStockTotalEditHandler->handle($productStockTotalEditDTO);
-
-        if(false === ($handle instanceof ProductStockTotal))
-        {
-            $this->Logger->critical(
-                'Не удалось обновить остаток продукта на складе',
+                'Остаток продукции на складе успешно обновлен',
                 [var_export($message, true), self::class.':'.__LINE__]
             );
-
-            return;
         }
 
-        $this->Logger->info(
-            'Остаток продукции на складе успешно обновлен',
-            [var_export($message, true), self::class.':'.__LINE__]
-        );
+
+        /** Если выбрана настройка обновления цены в карточке */
+        if(true === $fourTochkiProductDTO->getPrice()->getValue())
+        {
+            $updateProductPriceMessage = new UpdateProductPriceMessage();
+
+
+            /** Находим текущее событие продукта */
+            $productEvent = $this->CurrentProductEventRepository->findByProduct($message->getProduct());
+
+
+            /** Получаем цену с учетом торговой наценки */
+            $price = $fourTochkiGetFindTyreResult->getPriceWithPercent();
+
+            $updateProductPriceMessage
+                ->setEvent($productEvent->getId())
+                ->setOffer($message->getOffer())
+                ->setVariation($message->getVariation())
+                ->setModification($message->getModification())
+                ->setPrice($price);
+
+
+            /** Обновляем остаток на складе */
+            $this->MessageDispatch->dispatch($updateProductPriceMessage, [], 'products-product');
+
+            $this->Logger->info(
+                'Остаток продукции на складе успешно обновлен',
+                [var_export($message, true), self::class.':'.__LINE__]
+            );
+        }
     }
 }

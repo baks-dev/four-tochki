@@ -35,6 +35,7 @@ use BaksDev\FourTochki\UseCase\Admin\NewEdit\FourTochkiAuthNewEditHandler;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Password\FourTochkiAuthPasswordDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Login\FourTochkiAuthLoginDTO;
 use BaksDev\Core\Type\Modify\Modify\ModifyActionNew;
+use BaksDev\FourTochki\UseCase\Admin\NewEdit\Percent\FourTochkiAuthPercentDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Profile\FourTochkiAuthProfileDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Warehouse\FourTochkiAuthWarehouseDTO;
 use BaksDev\Products\Product\UseCase\Admin\NewEdit\Tests\ProductsProductNewAdminUseCaseTest;
@@ -132,6 +133,14 @@ final class FourTochkiAuthNewTest extends KernelTestCase
         self::assertSame(1, $fourTochkiAuthWarehouseDTO->getValue());
 
         $fourTochkiAuthNewEditDTO->setWarehouse($fourTochkiAuthWarehouseDTO);
+
+
+        // FourTochkiAuthPercentDTO
+        $fourTochkiAuthPercentDTO = new FourTochkiAuthPercentDTO();
+        $fourTochkiAuthPercentDTO->setValue('test');
+        self::assertSame('test', $fourTochkiAuthPercentDTO->getValue());
+
+        $fourTochkiAuthNewEditDTO->setPercent($fourTochkiAuthPercentDTO);
 
 
         /** @var FourTochkiAuthNewEditHandler $FourTochkiAuthNewEditHandler */

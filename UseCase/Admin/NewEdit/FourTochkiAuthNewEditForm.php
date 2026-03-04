@@ -28,6 +28,7 @@ namespace BaksDev\FourTochki\UseCase\Admin\NewEdit;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Active\FourTochkiAuthActiveForm;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Login\FourTochkiAuthLoginForm;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Password\FourTochkiAuthPasswordForm;
+use BaksDev\FourTochki\UseCase\Admin\NewEdit\Percent\FourTochkiAuthPercentForm;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Profile\FourTochkiAuthProfileForm;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Warehouse\FourTochkiAuthWarehouseForm;
 use Symfony\Component\Form\AbstractType;
@@ -48,6 +49,8 @@ final class FourTochkiAuthNewEditForm extends AbstractType
         $builder->add('active', FourTochkiAuthActiveForm::class, ['label' => false]);
 
         $builder->add('warehouse', FourTochkiAuthWarehouseForm::class, ['label' => false]);
+
+        $builder->add('percent', FourTochkiAuthPercentForm::class, ['label' => false]);
 
         $builder->add('four_tochki_auth_newedit', SubmitType::class, [
             'label' => 'Save',

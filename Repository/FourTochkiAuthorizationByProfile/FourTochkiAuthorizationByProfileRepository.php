@@ -29,6 +29,7 @@ use BaksDev\FourTochki\Entity\Active\FourTochkiAuthActive;
 use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\Entity\Login\FourTochkiAuthLogin;
 use BaksDev\FourTochki\Entity\Password\FourTochkiAuthPassword;
+use BaksDev\FourTochki\Entity\Percent\FourTochkiAuthPercent;
 use BaksDev\FourTochki\Entity\Profile\FourTochkiAuthProfile;
 use BaksDev\FourTochki\Entity\Warehouse\FourTochkiAuthWarehouse;
 use BaksDev\FourTochki\Type\Authorization\FourTochkiAuthorization;
@@ -108,10 +109,19 @@ final readonly class FourTochkiAuthorizationByProfileRepository implements FourT
             );
 
         $dbal
+            ->leftJoin(
+                'four_tochki_auth',
+                FourTochkiAuthPercent::class,
+                'four_tochki_auth_percent',
+                'four_tochki_auth_percent.event = four_tochki_auth.event',
+            );
+
+        $dbal
             ->select('four_tochki_auth.id AS profile')
             ->addSelect('four_tochki_auth_login.value AS login')
             ->addSelect('four_tochki_auth_password.value AS password')
-            ->addSelect('four_tochki_auth_warehouse.value AS warehouse');
+            ->addSelect('four_tochki_auth_warehouse.value AS warehouse')
+            ->addSelect('four_tochki_auth_percent.value AS percent');
 
         /* Кешируем результат ORM */
         return $dbal

@@ -26,7 +26,12 @@ declare(strict_types=1);
 namespace BaksDev\FourTochki\Messenger\UpdateOneFourTochkiProductStock;
 
 use BaksDev\Products\Product\Type\Id\ProductUid;
-use BaksDev\Products\Product\Type\Invariable\ProductInvariableUid;
+use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
+use BaksDev\Products\Product\Type\Offers\Id\ProductOfferUid;
+use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Id\ProductVariationUid;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\Id\ProductModificationUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use BaksDev\Users\User\Type\Id\UserUid;
 
@@ -38,22 +43,42 @@ final readonly class UpdateOneFourTochkiProductStockMessage
 
     private string $profile;
 
-    private string $invariable;
+    private string $offerId;
+
+    private string $variationId;
+
+    private string $modificationId;
+
+    private string $offerConst;
+
+    private string $variationConst;
+
+    private string $modificationConst;
 
     public function __construct(
         ProductUid $product,
-        private string $offer,
-        private string $variation,
-        private string $modification,
+        ProductOfferUid $offer,
+        ProductVariationUid $variation,
+        ProductModificationUid $modification,
+        private string $offerValue,
+        private string $variationValue,
+        private string $modificationValue,
+        ProductOfferConst $offerConst,
+        ProductVariationConst $variationConst,
+        ProductModificationConst $modificationConst,
         UserUid $user,
         UserProfileUid $profile,
-        ProductInvariableUid $invariable,
     )
     {
         $this->product = (string) $product;
         $this->user = (string) $user;
         $this->profile = (string) $profile;
-        $this->invariable = (string) $invariable;
+        $this->offerId = (string) $offer;
+        $this->variationId = (string) $variation;
+        $this->modificationId = (string) $modification;
+        $this->offerConst = (string) $offerConst;
+        $this->variationConst = (string) $variationConst;
+        $this->modificationConst = (string) $modificationConst;
     }
 
     public function getProduct(): ProductUid
@@ -61,19 +86,49 @@ final readonly class UpdateOneFourTochkiProductStockMessage
         return new ProductUid($this->product);
     }
 
+    public function getOffer(): ProductOfferUid
+    {
+        return new ProductOfferUid($this->offerId);
+    }
+
+    public function getVariation(): ProductVariationUid
+    {
+        return new ProductVariationUid($this->variationId);
+    }
+
+    public function getModification(): ProductModificationUid
+    {
+        return new ProductModificationUid($this->modificationId);
+    }
+
     public function getOfferValue(): string
     {
-        return $this->offer;
+        return $this->offerValue;
     }
 
     public function getVariationValue(): string
     {
-        return $this->variation;
+        return $this->variationValue;
     }
 
     public function getModificationValue(): string
     {
-        return $this->modification;
+        return $this->modificationValue;
+    }
+
+    public function getOfferConst(): ProductOfferConst
+    {
+        return new ProductOfferConst($this->offerConst);
+    }
+
+    public function getVariationConst(): ProductVariationConst
+    {
+        return new ProductVariationConst($this->variationConst);
+    }
+
+    public function getModificationConst(): ProductModificationConst
+    {
+        return new ProductModificationConst($this->modificationConst);
     }
 
     public function getUser(): UserUid
@@ -84,10 +139,5 @@ final readonly class UpdateOneFourTochkiProductStockMessage
     public function getProfile(): UserProfileUid
     {
         return new UserProfileUid($this->profile);
-    }
-
-    public function getInvariable(): ProductInvariableUid
-    {
-        return new ProductInvariableUid($this->invariable);
     }
 }

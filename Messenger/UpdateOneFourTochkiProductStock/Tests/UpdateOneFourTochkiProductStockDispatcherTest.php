@@ -29,7 +29,12 @@ use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\FourTochki\Messenger\UpdateOneFourTochkiProductStock\UpdateOneFourTochkiProductStockMessage;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Tests\FourTochkiAuthNewTest;
 use BaksDev\Products\Product\Type\Id\ProductUid;
-use BaksDev\Products\Product\Type\Invariable\ProductInvariableUid;
+use BaksDev\Products\Product\Type\Offers\ConstId\ProductOfferConst;
+use BaksDev\Products\Product\Type\Offers\Id\ProductOfferUid;
+use BaksDev\Products\Product\Type\Offers\Variation\ConstId\ProductVariationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Id\ProductVariationUid;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\ConstId\ProductModificationConst;
+use BaksDev\Products\Product\Type\Offers\Variation\Modification\Id\ProductModificationUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use BaksDev\Users\User\Type\Id\UserUid;
 use PHPUnit\Framework\Attributes\DependsOnClass;
@@ -51,12 +56,17 @@ final class UpdateOneFourTochkiProductStockDispatcherTest extends KernelTestCase
 
         $MessageDispatch->dispatch(new UpdateOneFourTochkiProductStockMessage(
             new ProductUid(),
+            new ProductOfferUid(),
+            new ProductVariationUid(),
+            new ProductModificationUid(),
             '18',
             '225',
             '40',
+            new ProductOfferConst(),
+            new ProductVariationConst(),
+            new ProductModificationConst(),
             new UserUid(),
             new UserProfileUid($profile),
-            new ProductInvariableUid()
         ));
 
         self::assertTrue(true);

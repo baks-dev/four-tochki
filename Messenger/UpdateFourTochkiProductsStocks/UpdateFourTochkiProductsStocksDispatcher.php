@@ -27,7 +27,9 @@ namespace BaksDev\FourTochki\Messenger\UpdateFourTochkiProductsStocks;
 
 use BaksDev\Core\Messenger\MessageDispatchInterface;
 use BaksDev\FourTochki\Messenger\UpdateOneFourTochkiProductStock\UpdateOneFourTochkiProductStockMessage;
-use BaksDev\Products\Product\Repository\AllProductsByCategory\AllProductsByCategoryInterface;
+use BaksDev\FourTochki\Products\Forms\FourTochkiFilter\FourTochkiProductsFilterDTO;
+use BaksDev\FourTochki\Products\Repository\AllProductsWithFourTochkiSettings\AllProductsWithFourTochkiSettingsInterface;
+use BaksDev\FourTochki\Products\Repository\AllProductsWithFourTochkiSettings\AllProductsWithFourTochkiSettingsResult;
 use BaksDev\Users\Profile\UserProfile\Repository\UserByUserProfile\UserByUserProfileInterface;
 use BaksDev\Users\User\Entity\User;
 use Psr\Log\LoggerInterface;
@@ -38,7 +40,7 @@ final readonly class UpdateFourTochkiProductsStocksDispatcher
 {
     public function __construct(
         private LoggerInterface $Logger,
-        private AllProductsByCategoryInterface $AllProductsByCategoryRepository,
+        private AllProductsWithFourTochkiSettingsInterface $AllProductsWithFourTochkiSettingsRepository,
         private MessageDispatchInterface $MessageDispatch,
         private UserByUserProfileInterface $UserByUserProfileRepository,
     ) {}
@@ -63,42 +65,41 @@ final readonly class UpdateFourTochkiProductsStocksDispatcher
 
 
         /** Получаем все продукты для данного профиля */
-        $result = $this->AllProductsByCategoryRepository
-            ->forProfile($message->getProfile())
-            ->fetchAllProductByCategory();
+        $result = $this->AllProductsWithFourTochkiSettingsRepository
+            ->filterFourTochkiProducts(new FourTochkiProductsFilterDTO()->setExists(true))
+            ->findPaginator()
+            ->getData();
 
-        if(false === $result)
-        {
-            $this->Logger->critical(
-                'Не удалось получить продукты для данного профиля',
-                [var_export($message, true), self::class.':'.__LINE__]
-            );
 
-            return;
-        }
-
-        foreach ($result as $allProductsByCategoryResult)
+        /** @var  AllProductsWithFourTochkiSettingsResult $allProductsWithFourTochkiSettingsResult */
+        foreach ($result as $allProductsWithFourTochkiSettingsResult)
         {
             /** Пропускаем продукты без модификации */
             if(
-                true === empty($allProductsByCategoryResult->getOfferValue()) ||
-                true === empty($allProductsByCategoryResult->getVariationValue()) ||
-                true === empty($allProductsByCategoryResult->getModificationValue())
+                true === empty($allProductsWithFourTochkiSettingsResult->getProductOfferValue()) ||
+                true === empty($allProductsWithFourTochkiSettingsResult->getProductVariationValue()) ||
+                true === empty($allProductsWithFourTochkiSettingsResult->getProductModificationValue())
             )
             {
                 continue;
             }
 
+
             /** Отправляем сообщение  */
             $this->MessageDispatch->dispatch(
                 new UpdateOneFourTochkiProductStockMessage(
-                    $allProductsByCategoryResult->getProductId(),
-                    $allProductsByCategoryResult->getOfferValue(),
-                    $allProductsByCategoryResult->getVariationValue(),
-                    $allProductsByCategoryResult->getModificationValue(),
+                    $allProductsWithFourTochkiSettingsResult->getId(),
+                    $allProductsWithFourTochkiSettingsResult->getProductOfferId(),
+                    $allProductsWithFourTochkiSettingsResult->getProductVariationId(),
+                    $allProductsWithFourTochkiSettingsResult->getProductModificationId(),
+                    $allProductsWithFourTochkiSettingsResult->getProductOfferValue(),
+                    $allProductsWithFourTochkiSettingsResult->getProductVariationValue(),
+                    $allProductsWithFourTochkiSettingsResult->getProductModificationValue(),
+                    $allProductsWithFourTochkiSettingsResult->getProductOfferConst(),
+                    $allProductsWithFourTochkiSettingsResult->getProductVariationConst(),
+                    $allProductsWithFourTochkiSettingsResult->getProductModificationConst(),
                     $user->getId(),
                     $message->getProfile(),
-                    $allProductsByCategoryResult->getProductInvariable(),
                 ),
                 transport: (string) $message->getProfile(),
             );

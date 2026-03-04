@@ -30,6 +30,7 @@ use BaksDev\FourTochki\Type\Event\FourTochkiAuthEventUid;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Active\FourTochkiAuthActiveDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Password\FourTochkiAuthPasswordDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Login\FourTochkiAuthLoginDTO;
+use BaksDev\FourTochki\UseCase\Admin\NewEdit\Percent\FourTochkiAuthPercentDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Profile\FourTochkiAuthProfileDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Warehouse\FourTochkiAuthWarehouseDTO;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -57,6 +58,9 @@ final class FourTochkiAuthNewEditDTO implements FourTochkiAuthEventInterface
     #[Assert\Valid]
     private FourTochkiAuthWarehouseDTO $warehouse;
 
+    #[Assert\Valid]
+    private FourTochkiAuthPercentDTO $percent;
+
     public function __construct()
     {
         $this->profile = new FourTochkiAuthProfileDTO();
@@ -64,6 +68,7 @@ final class FourTochkiAuthNewEditDTO implements FourTochkiAuthEventInterface
         $this->login= new FourTochkiAuthLoginDTO;
         $this->password = new FourTochkiAuthPasswordDTO;
         $this->warehouse = new FourTochkiAuthWarehouseDTO();
+        $this->percent = new FourTochkiAuthPercentDTO();
     }
 
     public function setId(?FourTochkiAuthEventUid $id): void
@@ -128,6 +133,17 @@ final class FourTochkiAuthNewEditDTO implements FourTochkiAuthEventInterface
     public function setWarehouse(FourTochkiAuthWarehouseDTO $warehouse): self
     {
         $this->warehouse = $warehouse;
+        return $this;
+    }
+
+    public function getPercent(): FourTochkiAuthPercentDTO
+    {
+        return $this->percent;
+    }
+
+    public function setPercent(FourTochkiAuthPercentDTO $percent): self
+    {
+        $this->percent = $percent;
         return $this;
     }
 }
