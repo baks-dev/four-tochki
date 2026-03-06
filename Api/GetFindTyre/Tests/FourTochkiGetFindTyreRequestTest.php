@@ -59,11 +59,11 @@ final class FourTochkiGetFindTyreRequestTest extends KernelTestCase
         $FourTochkiGetFindTyreRequest = self::getContainer()->get(FourTochkiGetFindTyreRequest::class);
 
         /** @var FourTochkiGetFindTyreRequest $FourTochkiGetFindTyreRequest */
-        $result = $FourTochkiGetFindTyreRequest
+        $FourTochkiGetFindTyreResult = $FourTochkiGetFindTyreRequest
             ->authorization($authorization)
             ->findTyre('CTS287312');
 
-        if(false === $result instanceof FourTochkiGetFindTyreResult)
+        if(false === ($FourTochkiGetFindTyreResult instanceof FourTochkiGetFindTyreResult))
         {
             return;
         }
@@ -79,6 +79,7 @@ final class FourTochkiGetFindTyreRequestTest extends KernelTestCase
             {
                 // Вызываем метод
                 $data = $method->invoke($FourTochkiGetFindTyreResult);
+
                 // dump($data);
             }
         }
