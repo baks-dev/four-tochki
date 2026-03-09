@@ -57,7 +57,7 @@ final class FourTochkiAuthorizationByProfileRepositoryTest extends KernelTestCas
 
         if(false === ($FourTochkiAuthorization instanceof FourTochkiAuthorization))
         {
-            echo "Данных авторизации не найдено".PHP_EOL;
+            echo sprintf('%s Данных авторизации не найдено %s %s', PHP_EOL, self::class, PHP_EOL);
             return;
         }
 
