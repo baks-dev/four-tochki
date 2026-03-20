@@ -65,9 +65,11 @@ final class FourTochkiAuthorizationByProfileRepositoryTest extends KernelTestCas
         $reflectionClass = new ReflectionClass(FourTochkiAuthorization::class);
         $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
 
-        foreach ($methods as $method) {
+        foreach($methods as $method)
+        {
             // Методы без аргументов
-            if ($method->getNumberOfParameters() === 0) {
+            if($method->getNumberOfParameters() === 0)
+            {
                 // Вызываем метод
                 $data = $method->invoke($FourTochkiAuthorization);
                 //dump($data);

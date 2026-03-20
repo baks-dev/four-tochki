@@ -88,7 +88,7 @@ final class AllProfileFourTochkiAuthRepository implements AllProfileFourTochkiAu
             ->setParameter(
                 'status',
                 UserProfileStatusActive::class,
-                UserProfileStatus::TYPE
+                UserProfileStatus::TYPE,
             );
 
         $dbal->join(

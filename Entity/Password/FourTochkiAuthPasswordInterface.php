@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace BaksDev\FourTochki\Entity\Password;
 
 /* FourTochkiAuthPassword */
+
 interface FourTochkiAuthPasswordInterface
 {
     public function getValue(): ?string;

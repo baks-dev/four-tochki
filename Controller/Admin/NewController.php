@@ -25,12 +25,12 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\Controller\Admin;
 
+use BaksDev\Core\Controller\AbstractController;
+use BaksDev\Core\Listeners\Event\Security\RoleSecurity;
 use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\FourTochkiAuthNewEditDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\FourTochkiAuthNewEditForm;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\FourTochkiAuthNewEditHandler;
-use BaksDev\Core\Controller\AbstractController;
-use BaksDev\Core\Listeners\Event\Security\RoleSecurity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;

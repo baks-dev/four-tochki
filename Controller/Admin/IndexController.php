@@ -25,11 +25,11 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\Controller\Admin;
 
-use BaksDev\FourTochki\Repository\AllFourTochkiAuth\AllFourTochkiAuthInterface;
 use BaksDev\Core\Controller\AbstractController;
 use BaksDev\Core\Form\Search\SearchDTO;
 use BaksDev\Core\Form\Search\SearchForm;
 use BaksDev\Core\Listeners\Event\Security\RoleSecurity;
+use BaksDev\FourTochki\Repository\AllFourTochkiAuth\AllFourTochkiAuthInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;

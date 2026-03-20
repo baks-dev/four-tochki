@@ -36,16 +36,56 @@ use Symfony\Component\DependencyInjection\Attribute\Target;
 
 abstract class FourTochkiApi
 {
-    private FourTochkiAuthorization|false $authorization = false;
-
     private const string PATH = 'http://api-b2b.4tochki.ru/WCF/ClientService.svc?wsdl';
-
     protected UserProfileUid|false $profile = false;
+    private FourTochkiAuthorization|false $authorization = false;
 
     public function __construct(
         #[Target('fourTochkiLogger')] protected LoggerInterface $Logger,
         private readonly FourTochkiAuthorizationByProfileInterface $FourTochkiAuthorizationByProfileRepository,
     ) {}
+
+    public function authorization(FourTochkiAuthorization|false $authorization): self
+    {
+        $this->authorization = $authorization;
+        return $this;
+    }
+
+    public function tokenHttpClient(string $method, array $options = [])
+    {
+        /**
+         * Если данные для авторизации не были прокинуты в виде объекта на прямую - должен быть прокинут профиль для их
+         * поиска
+         */
+        if(false === $this->authorization)
+        {
+            if(false === $this->profile)
+            {
+                $this->Logger->critical(
+                    'Не указан идентификатор профиля пользователя через вызов метода profile',
+                    [self::class.':'.__LINE__],
+                );
+
+                throw new InvalidArgumentException(
+                    'Не указан идентификатор профиля пользователя через вызов метода profile: ->profile($UserProfileUid)',
+                );
+            }
+
+
+            /**
+             * Если профиль указан, но по какой-то причине отсутствует значение свойства authorization - вызываем метод
+             * profile для нахождения данных для авторизации
+             */
+            $this->profile($this->profile);
+        }
+
+        $client = new SoapClient(self::PATH);
+
+        $options['login'] = $this->authorization->getLogin();
+        $options['password'] = $this->authorization->getPassword();
+
+        return $client->$method($options);
+    }
 
     public function profile(UserProfile|UserProfileUid|string $profile): self
     {
@@ -68,48 +108,6 @@ abstract class FourTochkiApi
         }
 
         return $this;
-    }
-
-    public function authorization(FourTochkiAuthorization|false $authorization): self
-    {
-        $this->authorization = $authorization;
-        return $this;
-    }
-
-    public function tokenHttpClient(string $method, array $options = [])
-    {
-        /**
-         * Если данные для авторизации не были прокинуты в виде объекта на прямую - должен быть прокинут профиль для их
-         * поиска
-         */
-        if(false === $this->authorization)
-        {
-            if(false === $this->profile)
-            {
-                $this->Logger->critical(
-                    'Не указан идентификатор профиля пользователя через вызов метода profile',
-                    [self::class.':'.__LINE__]
-                );
-
-                throw new InvalidArgumentException(
-                    'Не указан идентификатор профиля пользователя через вызов метода profile: ->profile($UserProfileUid)'
-                );
-            }
-
-
-            /**
-             * Если профиль указан, но по какой-то причине отсутствует значение свойства authorization - вызываем метод
-             * profile для нахождения данных для авторизации
-             */
-             $this->profile($this->profile);
-        }
-
-        $client = new SoapClient(self::PATH);
-
-        $options['login'] = $this->authorization->getLogin();
-        $options['password'] = $this->authorization->getPassword();
-
-        return $client->$method($options);
     }
 
     public function getWarehouse(): int|false

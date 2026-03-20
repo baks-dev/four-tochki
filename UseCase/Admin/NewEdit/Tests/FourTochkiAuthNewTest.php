@@ -25,16 +25,16 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\UseCase\Admin\NewEdit\Tests;
 
-use BaksDev\FourTochki\Entity\FourTochkiAuth;
+use BaksDev\Core\Type\Modify\Modify\ModifyActionNew;
 use BaksDev\FourTochki\Entity\Event\FourTochkiAuthEvent;
+use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\Entity\Modify\FourTochkiAuthModify;
 use BaksDev\FourTochki\Type\Id\FourTochkiAuthUid;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Active\FourTochkiAuthActiveDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\FourTochkiAuthNewEditDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\FourTochkiAuthNewEditHandler;
-use BaksDev\FourTochki\UseCase\Admin\NewEdit\Password\FourTochkiAuthPasswordDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Login\FourTochkiAuthLoginDTO;
-use BaksDev\Core\Type\Modify\Modify\ModifyActionNew;
+use BaksDev\FourTochki\UseCase\Admin\NewEdit\Password\FourTochkiAuthPasswordDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Percent\FourTochkiAuthPercentDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Profile\FourTochkiAuthProfileDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Warehouse\FourTochkiAuthWarehouseDTO;

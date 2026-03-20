@@ -25,10 +25,10 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\UseCase\Admin\NewEdit;
 
-use BaksDev\FourTochki\Entity\FourTochkiAuth;
-use BaksDev\FourTochki\Entity\Event\FourTochkiAuthEvent;
-use BaksDev\FourTochki\Messenger\FourTochkiAuthMessage;
 use BaksDev\Core\Entity\AbstractHandler;
+use BaksDev\FourTochki\Entity\Event\FourTochkiAuthEvent;
+use BaksDev\FourTochki\Entity\FourTochkiAuth;
+use BaksDev\FourTochki\Messenger\FourTochkiAuthMessage;
 
 final class FourTochkiAuthNewEditHandler extends AbstractHandler
 {

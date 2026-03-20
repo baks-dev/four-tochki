@@ -56,11 +56,6 @@ class FourTochkiAuth
         return (string) $this->id;
     }
 
-    public function getId(): FourTochkiAuthUid
-    {
-        return $this->id;
-    }
-
     public function getEvent(): FourTochkiAuthEventUid
     {
         return $this->event;
@@ -69,5 +64,10 @@ class FourTochkiAuth
     public function setEvent(FourTochkiAuthEvent|FourTochkiAuthEventUid $eventId): void
     {
         $this->event = $eventId instanceof FourTochkiAuthEvent ? $eventId->getId() : $eventId;
+    }
+
+    public function getId(): FourTochkiAuthUid
+    {
+        return $this->id;
     }
 }

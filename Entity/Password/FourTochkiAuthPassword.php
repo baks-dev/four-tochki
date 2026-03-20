@@ -57,12 +57,13 @@ class FourTochkiAuthPassword extends EntityEvent
 
     public function __toString(): string
     {
-        return (string)$this->event;
+        return (string) $this->event;
     }
 
     public function getDto($dto): mixed
     {
-        if ($dto instanceof FourTochkiAuthPasswordInterface) {
+        if($dto instanceof FourTochkiAuthPasswordInterface)
+        {
             return parent::getDto($dto);
         }
 
@@ -72,7 +73,8 @@ class FourTochkiAuthPassword extends EntityEvent
 
     public function setEntity($dto): mixed
     {
-        if ($dto instanceof FourTochkiAuthPasswordInterface) {
+        if($dto instanceof FourTochkiAuthPasswordInterface)
+        {
             return parent::setEntity($dto);
         }
 

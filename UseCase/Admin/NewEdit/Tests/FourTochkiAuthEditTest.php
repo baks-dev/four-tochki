@@ -25,13 +25,13 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\UseCase\Admin\NewEdit\Tests;
 
-use BaksDev\FourTochki\Entity\FourTochkiAuth;
+use BaksDev\Core\Type\Modify\Modify\ModifyActionUpdate;
 use BaksDev\FourTochki\Entity\Event\FourTochkiAuthEvent;
+use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\Entity\Modify\FourTochkiAuthModify;
 use BaksDev\FourTochki\Type\Event\FourTochkiAuthEventUid;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\FourTochkiAuthNewEditDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\FourTochkiAuthNewEditHandler;
-use BaksDev\Core\Type\Modify\Modify\ModifyActionUpdate;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DependsOnClass;
 use PHPUnit\Framework\Attributes\Group;

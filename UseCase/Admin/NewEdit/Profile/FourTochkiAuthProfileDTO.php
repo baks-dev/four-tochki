@@ -39,6 +39,7 @@ final class FourTochkiAuthProfileDTO implements FourTochkiAuthInterface
 
     /**
      * Значение свойства
+     *
      * @see FourTochkiAuthEvent
      */
     public function getValue(): ?UserProfileUid

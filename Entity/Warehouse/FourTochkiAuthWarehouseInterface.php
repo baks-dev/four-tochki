@@ -29,6 +29,7 @@ interface FourTochkiAuthWarehouseInterface
 {
     /**
      * Значение свойства
+     *
      * @see FourTochkiAuthEvent
      */
     public function getValue(): ?int;

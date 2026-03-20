@@ -25,14 +25,14 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\Controller\Admin;
 
-use BaksDev\FourTochki\Entity\FourTochkiAuth;
+use BaksDev\Core\Controller\AbstractController;
+use BaksDev\Core\Listeners\Event\Security\RoleSecurity;
 use BaksDev\FourTochki\Entity\Event\FourTochkiAuthEvent;
+use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\Type\Event\FourTochkiAuthEventUid;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\FourTochkiAuthNewEditDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\FourTochkiAuthNewEditForm;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\FourTochkiAuthNewEditHandler;
-use BaksDev\Core\Controller\AbstractController;
-use BaksDev\Core\Listeners\Event\Security\RoleSecurity;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +54,8 @@ final class EditController extends AbstractController
 
         /** Запрещаем редактировать чужые данные для авторизации */
         if(
-            $this->isAdmin() === true || $fourTochkiAuthEvent->getProfile()->equals($this->getProfileUid()) === true)
+            $this->isAdmin() === true || $fourTochkiAuthEvent->getProfile()->equals($this->getProfileUid()) === true
+        )
         {
             $fourTochkiAuthEvent->getDto($fourTochkiAuthNewEditDTO);
         }
@@ -72,7 +73,7 @@ final class EditController extends AbstractController
                 data: $fourTochkiAuthNewEditDTO,
                 options: ['action' => $this->generateUrl(
                     'four-tochki:admin.newedit.edit',
-                    ['id' => $fourTochkiAuthNewEditDTO->getEvent() ?: new FourTochkiAuthEventUid()]
+                    ['id' => $fourTochkiAuthNewEditDTO->getEvent() ?: new FourTochkiAuthEventUid()],
                 )],
             )
             ->handleRequest($request);
@@ -91,7 +92,7 @@ final class EditController extends AbstractController
                     'breadcrumb.edit',
                     'danger.edit',
                     'four-tochki.admin',
-                    '404'
+                    '404',
                 );
                 return $this->redirectToReferer();
             }
@@ -109,7 +110,7 @@ final class EditController extends AbstractController
                 'breadcrumb.edit',
                 'danger.edit',
                 'four-tochki.admin',
-                $fourTochkiAuth
+                $fourTochkiAuth,
             );
 
             return $this->redirectToReferer();

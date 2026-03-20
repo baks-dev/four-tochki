@@ -29,6 +29,7 @@ interface FourTochkiAuthLoginInterface
 {
     /**
      * Значение свойства
+     *
      * @see FourTochkiAuthEvent
      */
     public function getValue(): ?string;

@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\Repository\FourTochkiAuthorizationByProfile;
 
+use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\FourTochki\Entity\Active\FourTochkiAuthActive;
 use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\Entity\Login\FourTochkiAuthLogin;
@@ -33,7 +34,6 @@ use BaksDev\FourTochki\Entity\Percent\FourTochkiAuthPercent;
 use BaksDev\FourTochki\Entity\Profile\FourTochkiAuthProfile;
 use BaksDev\FourTochki\Entity\Warehouse\FourTochkiAuthWarehouse;
 use BaksDev\FourTochki\Type\Authorization\FourTochkiAuthorization;
-use BaksDev\Core\Doctrine\DBALQueryBuilder;
 use BaksDev\Users\Profile\UserProfile\Entity\Event\Info\UserProfileInfo;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use BaksDev\Users\Profile\UserProfile\Type\UserProfileStatus\Status\UserProfileStatusActive;
@@ -59,7 +59,7 @@ final readonly class FourTochkiAuthorizationByProfileRepository implements FourT
                 'four_tochki_auth_profile',
                 FourTochkiAuth::class,
                 'four_tochki_auth',
-                'four_tochki_auth_profile.event = four_tochki_auth.event'
+                'four_tochki_auth_profile.event = four_tochki_auth.event',
             );
 
         $dbal->join(

@@ -25,8 +25,8 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\Controller\Admin\Tests;
 
-use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\Entity\Event\FourTochkiAuthEvent;
+use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\Type\Id\FourTochkiAuthUid;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Tests\FourTochkiAuthNewTest;
 use BaksDev\Users\User\Tests\TestUserAccount;

@@ -25,8 +25,8 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\Entity\Percent;
 
-use BaksDev\FourTochki\Entity\Event\FourTochkiAuthEvent;
 use BaksDev\Core\Entity\EntityEvent;
+use BaksDev\FourTochki\Entity\Event\FourTochkiAuthEvent;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;

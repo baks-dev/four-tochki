@@ -25,9 +25,9 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\UseCase\Admin\Delete\Modify;
 
-use BaksDev\FourTochki\Entity\Modify\FourTochkiAuthModifyInterface;
 use BaksDev\Core\Type\Modify\Modify\ModifyActionDelete;
 use BaksDev\Core\Type\Modify\ModifyAction;
+use BaksDev\FourTochki\Entity\Modify\FourTochkiAuthModifyInterface;
 
 final readonly class ModifyDTO implements FourTochkiAuthModifyInterface
 {

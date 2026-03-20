@@ -25,13 +25,13 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\Controller\Admin;
 
-use BaksDev\FourTochki\Entity\FourTochkiAuth;
+use BaksDev\Core\Controller\AbstractController;
+use BaksDev\Core\Listeners\Event\Security\RoleSecurity;
 use BaksDev\FourTochki\Entity\Event\FourTochkiAuthEvent;
+use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\UseCase\Admin\Delete\FourTochkiAuthDeleteDTO;
 use BaksDev\FourTochki\UseCase\Admin\Delete\FourTochkiAuthDeleteForm;
 use BaksDev\FourTochki\UseCase\Admin\Delete\FourTochkiAuthDeleteHandler;
-use BaksDev\Core\Controller\AbstractController;
-use BaksDev\Core\Listeners\Event\Security\RoleSecurity;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,7 +57,7 @@ final class DeleteController extends AbstractController
             ->createForm(
                 type: FourTochkiAuthDeleteForm::class,
                 data: $dto,
-                options: ['action' => $this->generateUrl('four-tochki:admin.delete', ['id' => $dto->getEvent()])]
+                options: ['action' => $this->generateUrl('four-tochki:admin.delete', ['id' => $dto->getEvent()])],
             )
             ->handleRequest($request);
 

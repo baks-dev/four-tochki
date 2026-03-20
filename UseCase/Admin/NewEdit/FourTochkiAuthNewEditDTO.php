@@ -28,8 +28,8 @@ namespace BaksDev\FourTochki\UseCase\Admin\NewEdit;
 use BaksDev\FourTochki\Entity\Event\FourTochkiAuthEventInterface;
 use BaksDev\FourTochki\Type\Event\FourTochkiAuthEventUid;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Active\FourTochkiAuthActiveDTO;
-use BaksDev\FourTochki\UseCase\Admin\NewEdit\Password\FourTochkiAuthPasswordDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Login\FourTochkiAuthLoginDTO;
+use BaksDev\FourTochki\UseCase\Admin\NewEdit\Password\FourTochkiAuthPasswordDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Percent\FourTochkiAuthPercentDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Profile\FourTochkiAuthProfileDTO;
 use BaksDev\FourTochki\UseCase\Admin\NewEdit\Warehouse\FourTochkiAuthWarehouseDTO;
@@ -65,7 +65,7 @@ final class FourTochkiAuthNewEditDTO implements FourTochkiAuthEventInterface
     {
         $this->profile = new FourTochkiAuthProfileDTO();
         $this->active = new FourTochkiAuthActiveDTO;
-        $this->login= new FourTochkiAuthLoginDTO;
+        $this->login = new FourTochkiAuthLoginDTO;
         $this->password = new FourTochkiAuthPasswordDTO;
         $this->warehouse = new FourTochkiAuthWarehouseDTO();
         $this->percent = new FourTochkiAuthPercentDTO();

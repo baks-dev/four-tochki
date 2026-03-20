@@ -26,8 +26,8 @@ declare(strict_types=1);
 namespace BaksDev\FourTochki\Entity\Event;
 
 use BaksDev\Core\Entity\EntityEvent;
-use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\Entity\Active\FourTochkiAuthActive;
+use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\Entity\Login\FourTochkiAuthLogin;
 use BaksDev\FourTochki\Entity\Modify\FourTochkiAuthModify;
 use BaksDev\FourTochki\Entity\Password\FourTochkiAuthPassword;
@@ -101,11 +101,6 @@ class FourTochkiAuthEvent extends EntityEvent
         return (string) $this->id;
     }
 
-    public function getId(): FourTochkiAuthEventUid
-    {
-        return $this->id;
-    }
-
     public function getProfile(): UserProfileUid
     {
         return $this->profile?->getValue();
@@ -116,6 +111,11 @@ class FourTochkiAuthEvent extends EntityEvent
         $this->main = $main instanceof FourTochkiAuth ? $main->getId() : $main;
 
         return $this;
+    }
+
+    public function getId(): FourTochkiAuthEventUid
+    {
+        return $this->id;
     }
 
     public function getDto($dto): mixed

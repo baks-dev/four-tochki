@@ -25,8 +25,8 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\UseCase\Admin\Delete\Tests;
 
-use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\Entity\Event\FourTochkiAuthEvent;
+use BaksDev\FourTochki\Entity\FourTochkiAuth;
 use BaksDev\FourTochki\Type\Id\FourTochkiAuthUid;
 use BaksDev\FourTochki\UseCase\Admin\Delete\FourTochkiAuthDeleteDTO;
 use BaksDev\FourTochki\UseCase\Admin\Delete\FourTochkiAuthDeleteHandler;
@@ -44,6 +44,15 @@ use Symfony\Component\DependencyInjection\Attribute\When;
 #[Group('four-tochki-usecase')]
 final class FourTochkiAuthDeleteTest extends KernelTestCase
 {
+    public static function tearDownAfterClass(): void
+    {
+        /** Удаляем тестовый продукт после завершения */
+        ProductsProductDeleteAdminUseCaseTest::tearDownAfterClass();
+
+        /** Удаляем тестовые данные для авторизации FourTochki */
+        FourTochkiAuthNewTest::setUpBeforeClass();
+    }
+
     #[DependsOnClass(FourTochkiAuthEditTest::class)]
     public function testDelete(): void
     {
@@ -81,14 +90,5 @@ final class FourTochkiAuthDeleteTest extends KernelTestCase
             ->find($deleteFourTochkiAuth->getId());
 
         self::assertNull($fourTochkiAuth);
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        /** Удаляем тестовый продукт после завершения */
-        ProductsProductDeleteAdminUseCaseTest::tearDownAfterClass();
-
-        /** Удаляем тестовые данные для авторизации FourTochki */
-        FourTochkiAuthNewTest::setUpBeforeClass();
     }
 }
