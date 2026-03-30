@@ -81,7 +81,6 @@ final class AllFourTochkiAuthRepository implements AllFourTochkiAuthInterface
             ->addSelect('four_tochki_auth.event')
             ->from(FourTochkiAuth::class, 'four_tochki_auth');
 
-
         $dbal
             ->addSelect('four_tochki_auth_profile.value as users_profile_uid')
             ->join(
