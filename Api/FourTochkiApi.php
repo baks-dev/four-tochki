@@ -32,6 +32,7 @@ use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use SoapClient;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 
 abstract class FourTochkiApi
@@ -41,6 +42,7 @@ abstract class FourTochkiApi
     private FourTochkiAuthorization|false $authorization = false;
 
     public function __construct(
+        #[Autowire(env: 'APP_ENV')] private readonly string $environment,
         #[Target('fourTochkiLogger')] protected LoggerInterface $Logger,
         private readonly FourTochkiAuthorizationByProfileInterface $FourTochkiAuthorizationByProfileRepository,
     ) {}
@@ -123,5 +125,15 @@ abstract class FourTochkiApi
     public function getPercent(): string|false
     {
         return $this->authorization ? $this->authorization->getPercent() : false;
+    }
+
+
+    /**
+     * Метод проверяет что окружение является PROD, тем самым позволяет выполнять операции запроса на сторонний сервис
+     * ТОЛЬКО в PROD окружении
+     */
+    protected function isExecuteEnvironment(): bool
+    {
+        return $this->environment === 'prod';
     }
 }
