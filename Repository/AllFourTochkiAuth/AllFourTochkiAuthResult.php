@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace BaksDev\FourTochki\Repository\AllFourTochkiAuth;
 
+use BaksDev\Auth\Email\Type\Email\AccountEmail;
 use BaksDev\FourTochki\Type\Event\FourTochkiAuthEventUid;
 use BaksDev\Users\Profile\UserProfile\Type\Event\UserProfileEventUid;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
@@ -100,9 +101,9 @@ final readonly class AllFourTochkiAuthResult
     }
 
     /** AccountEmail */
-    public function getAccountEmail()
+    public function getAccountEmail(): AccountEmail
     {
-        return $this->account_email;
+        return new AccountEmail($this->account_email);
     }
 
     /** AccountStatus */
@@ -112,8 +113,8 @@ final readonly class AllFourTochkiAuthResult
     }
 
     /** Active */
-    public function getActive()
+    public function getActive(): bool
     {
-        return $this->active;
+        return $this->active === true;
     }
 }
