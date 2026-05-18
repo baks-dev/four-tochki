@@ -29,6 +29,7 @@ use BaksDev\FourTochki\Repository\FourTochkiAuthorizationByProfile\FourTochkiAut
 use BaksDev\FourTochki\Type\Authorization\FourTochkiAuthorization;
 use BaksDev\Users\Profile\UserProfile\Entity\UserProfile;
 use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
+use BaksDev\Yandex\Market\Type\Id\YaMarketTokenUid;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use SoapClient;
@@ -61,7 +62,7 @@ abstract class FourTochkiApi
          */
         if(false === $this->authorization)
         {
-            if(false === $this->profile)
+            if(false === ($this->profile instanceof UserProfileUid))
             {
                 $this->Logger->critical(
                     'Не указан идентификатор профиля пользователя через вызов метода profile',
@@ -134,6 +135,18 @@ abstract class FourTochkiApi
      */
     protected function isExecuteEnvironment(): bool
     {
+        if(false === ($this->profile instanceof UserProfileUid))
+        {
+            $this->Logger->critical(
+                'Не указан идентификатор профиля пользователя через вызов метода profile',
+                [self::class.':'.__LINE__],
+            );
+
+            throw new InvalidArgumentException(
+                'Не указан идентификатор профиля пользователя через вызов метода profile: ->profile($UserProfileUid)',
+            );
+        }
+
         return $this->environment === 'prod';
     }
 }
