@@ -125,7 +125,7 @@ final readonly class FourTochkiAuthorizationByProfileRepository implements FourT
 
         /* Кешируем результат ORM */
         return $dbal
-            ->enableCache('four_tochki')
+            ->enableCache('four-tochki')
             ->fetchHydrate(FourTochkiAuthorization::class);
     }
 }
