@@ -135,18 +135,6 @@ abstract class FourTochkiApi
      */
     protected function isExecuteEnvironment(): bool
     {
-        if(false === ($this->profile instanceof UserProfileUid))
-        {
-            $this->Logger->critical(
-                'Не указан идентификатор профиля пользователя через вызов метода profile',
-                [self::class.':'.__LINE__],
-            );
-
-            throw new InvalidArgumentException(
-                'Не указан идентификатор профиля пользователя через вызов метода profile: ->profile($UserProfileUid)',
-            );
-        }
-
         return $this->environment === 'prod';
     }
 }
